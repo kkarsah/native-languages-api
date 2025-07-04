@@ -1,0 +1,50 @@
+# Environment variables
+.env
+.env.local
+.env.production
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Docker volumes
+volumes/
+data/
+
+# SSL certificates (don't commit private keys)
+ssl/privkey.pem
+ssl/*.key
+
+# Database data
+postgres_data/
+redis_data/
+grafana_data/
+
+# Node modules
+node_modules/
+*/node_modules/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backups
+backups/
+*.backup
+
+# Temporary files
+tmp/
+temp/
