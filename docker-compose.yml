@@ -15,6 +15,22 @@ services:
       - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./config/nginx/conf.d:/etc/nginx/conf.d
       - ./ssl:/etc/nginx/ssl
+      - ./frontend/website:/var/www/website  # Add website files
+    restart: unless-stopped
+    networks:
+      - api-network
+
+  # =============================================================================
+  # FRONTEND - WEBSITE
+  # =============================================================================
+  
+  website:
+    image: nginx:alpine
+    container_name: website-server
+    volumes:
+      - ./frontend/website:/usr/share/nginx/html
+    ports:
+      - "8081:80"  # Exposed for direct access during development
     restart: unless-stopped
     networks:
       - api-network
