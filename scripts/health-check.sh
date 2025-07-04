@@ -31,17 +31,80 @@ else
 fi
 
 # Check Languages Service (on exposed port 3100)
-if curl -s http://localhost:3100/health | grep -q "healthy\|service\|status" 2>/dev/null; then
+if curl -s -f http://localhost:3100/health > /dev/null 2>&1; then
     echo "✓ Languages Service: Healthy"
 else
     echo "✗ Languages Service: Unhealthy"
 fi
 
 # Check Audio Service (on exposed port 3101)
-if curl -s http://localhost:3101/health | grep -q "healthy\|service\|status" 2>/dev/null; then
+if curl -s -f http://localhost:3101/health > /dev/null 2>&1; then
     echo "✓ Audio Service: Healthy"
 else
     echo "✗ Audio Service: Unhealthy"
+fi
+
+# Check Users Service
+if curl -s -f http://localhost:3102/health > /dev/null 2>&1; then
+    echo "✓ Users Service: Healthy"
+else
+    echo "✗ Users Service: Unhealthy"
+fi
+
+# Check Analytics Service
+if curl -s -f http://localhost:3103/health > /dev/null 2>&1; then
+    echo "✓ Analytics Service: Healthy"
+else
+    echo "✗ Analytics Service: Unhealthy"
+fi
+
+# Check Admin Service
+if curl -s -f http://localhost:3104/health > /dev/null 2>&1; then
+    echo "✓ Admin Service: Healthy"
+else
+    echo "✗ Admin Service: Unhealthy"
+fi
+
+# Check Webhooks Service
+if curl -s -f http://localhost:3105/health > /dev/null 2>&1; then
+    echo "✓ Webhooks Service: Healthy"
+else
+    echo "✗ Webhooks Service: Unhealthy"
+fi
+
+echo ""
+echo "API Functionality Tests:"
+
+# Test authentication enforcement
+AUTH_TEST=$(curl -s http://localhost:8000/v1/languages)
+if echo "$AUTH_TEST" | grep -q "No API key"; then
+    echo "✓ Authentication: Properly enforced"
+else
+    echo "✗ Authentication: Not enforced"
+fi
+
+# Test Free tier API
+FREE_TEST=$(curl -s -H "X-API-Key: nl-free-demo-12345" http://localhost:8000/v1/languages)
+if echo "$FREE_TEST" | grep -q "Native Languages API\|Swahili"; then
+    echo "✓ Free Tier API: Working"
+else
+    echo "✗ Free Tier API: Not working"
+fi
+
+# Test Pro tier API
+PRO_TEST=$(curl -s -H "X-API-Key: nl-pro-01e0d32563af96ad" http://localhost:8000/v1/languages)
+if echo "$PRO_TEST" | grep -q "Native Languages API\|Swahili"; then
+    echo "✓ Pro Tier API: Working"
+else
+    echo "✗ Pro Tier API: Not working"
+fi
+
+# Test HTTPS endpoints
+HTTPS_TEST=$(curl -s -H "X-API-Key: nl-free-demo-12345" https://api.nativetongueapis.com/v1/languages)
+if echo "$HTTPS_TEST" | grep -q "Native Languages API\|Swahili"; then
+    echo "✓ HTTPS API: Working"
+else
+    echo "✗ HTTPS API: Not working"
 fi
 
 echo ""
