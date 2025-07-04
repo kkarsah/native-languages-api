@@ -48,7 +48,7 @@ services:
       - api-network
 
   # =============================================================================
-  # MICROSERVICES (using different ports)
+  # MICROSERVICES
   # =============================================================================
   
   languages-service:
@@ -80,6 +80,78 @@ services:
       - REDIS_PASSWORD=${REDIS_PASSWORD}
     ports:
       - "3101:3001"
+    depends_on:
+      - postgres
+      - redis
+    restart: unless-stopped
+    networks:
+      - api-network
+
+  users-service:
+    build: ./services/users
+    container_name: users-service
+    environment:
+      - NODE_ENV=${ENVIRONMENT}
+      - DB_HOST=${DB_HOST}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    ports:
+      - "3102:3002"
+    depends_on:
+      - postgres
+      - redis
+    restart: unless-stopped
+    networks:
+      - api-network
+
+  analytics-service:
+    build: ./services/analytics
+    container_name: analytics-service
+    environment:
+      - NODE_ENV=${ENVIRONMENT}
+      - DB_HOST=${DB_HOST}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    ports:
+      - "3103:3003"
+    depends_on:
+      - postgres
+      - redis
+    restart: unless-stopped
+    networks:
+      - api-network
+
+  admin-service:
+    build: ./services/admin
+    container_name: admin-service
+    environment:
+      - NODE_ENV=${ENVIRONMENT}
+      - DB_HOST=${DB_HOST}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    ports:
+      - "3104:3004"
+    depends_on:
+      - postgres
+      - redis
+    restart: unless-stopped
+    networks:
+      - api-network
+
+  webhooks-service:
+    build: ./services/webhooks
+    container_name: webhooks-service
+    environment:
+      - NODE_ENV=${ENVIRONMENT}
+      - DB_HOST=${DB_HOST}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    ports:
+      - "3105:3005"
     depends_on:
       - postgres
       - redis
