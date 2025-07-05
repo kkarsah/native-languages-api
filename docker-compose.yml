@@ -15,7 +15,8 @@ services:
       - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./config/nginx/conf.d:/etc/nginx/conf.d
       - ./ssl:/etc/nginx/ssl
-      - ./frontend/website:/var/www/website  # Add website files
+      - ./frontend/website:/var/www/website
+      - ./frontend/docs:/var/www/docs
     restart: unless-stopped
     networks:
       - api-network
